@@ -114,7 +114,7 @@
 //   );
 // }
 // src/components/Navbar.jsx
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -143,10 +143,12 @@ export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { pathname } = useLocation();
 
-  const toggleDrawer = (open) => () => setDrawerOpen(open);
+   const toggleDrawer = () => {
+    setDrawerOpen((prev) => !prev);
+  };
 
   const drawer = (
-    <Box onClick={toggleDrawer(false)} sx={{ width: 250 }} role="presentation">
+    <Box onClick={toggleDrawer} sx={{ width: 250, paddingTop: 10 }} role="presentation">
       <List>
         {navLinks.map(({ label, path }) => (
           <ListItem key={label} disablePadding>
@@ -167,7 +169,7 @@ export default function Navbar() {
     <>
       <AppBar position="fixed"  sx={{ backgroundColor: 'background.paper', color: 'primary.main'}}  elevation={0}>
         <Container maxWidth="lg">
-          <Toolbar disableGutters sx={{ minHeight: 64 }}>
+          <Toolbar disableGutters sx={{ minHeight: 45 }}>
             {/* Logo / Brand */}
             <Typography
               variant="h6"
@@ -187,7 +189,7 @@ export default function Navbar() {
               edge="end"
               color="inherit"
               aria-label="menu"
-              onClick={toggleDrawer(true)}
+              onClick={toggleDrawer}
               sx={{ display: { xs: 'block', sm: 'none' } }}
             >
               <MenuIcon />
@@ -216,8 +218,9 @@ export default function Navbar() {
       <Drawer
         anchor="right"
         open={drawerOpen}
-        onClose={toggleDrawer(false)}
+        onClose={toggleDrawer}
         ModalProps={{ keepMounted: true }}
+        
       >
         {drawer}
       </Drawer>

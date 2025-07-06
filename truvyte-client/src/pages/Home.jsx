@@ -1,22 +1,9 @@
 // src/pages/Home.jsx
 import { Container, Typography, Button, Grid, Paper, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
-import useTypewriter from '../hooks/useTypewriter';
 
 export default function Home() {
 
-     const { text, showCursor } = useTypewriter(
-    [
-      'Instant AI Compliance Audits. Trusted By Modern Startups.',
-      'Prevent Legal Consequences. Audit Your AI Model',
-    ],
-    {
-      typingSpeed: 100,
-      deletingSpeed: 50,
-      pause: 2000,
-      cursorBlinkSpeed: 500
-    }
-  );
   return (
     // <Container maxWidth="lg" sx={{ pt: 8, pb: 12 }}>
          <Container
@@ -31,23 +18,11 @@ export default function Home() {
       {/* Hero */}
       <Box textAlign="center" mb={{ xs: 6, sm: 8, md: 10 }}>
         <Typography variant="h1" gutterBottom>
-            {text}
-          <Box
-            component="span"
-            sx={{
-              display: 'inline-block',
-              width: '1ch',
-              ml: 0.5,
-              opacity: showCursor ? 1 : 0,
-              transition: 'opacity 0.1s linear'
-            }}
-          >
-            |
-          </Box>
+            Instant AI Compliance Audits. Trusted By Modern Startups.
         </Typography>
         <Typography variant="h5" color="text.secondary" mb={{ xs: 2, sm: 4 }}>
-          Truvyte runs instant, jurisdiction‑specific compliance checks,
-          so you can display a verified certification badge with confidence.
+          Truvyte runs instant, jurisdiction‑specific compliance checks, using policies like GDPR, EU AI act and more.
+          Display your verified certification badge with confidence.
         </Typography>
         <Button
           component={Link}

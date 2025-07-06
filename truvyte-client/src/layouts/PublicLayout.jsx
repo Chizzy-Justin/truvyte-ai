@@ -1,22 +1,4 @@
-// // src/layouts/PublicLayout.jsx
-// import { Box, Toolbar } from '@mui/material';
-// import Navbar from '../components/Navbar';
-// import { Outlet } from 'react-router-dom';
-// import Footer from '../components/Footer';
 
-// export default function PublicLayout() {
-//   return (
-//     <Box>
-//       <Navbar />
-//       <Toolbar />
-//       {/* push content below the Navbar */}
-//       <Box component="main" sx={{ mt: 8 }}>
-//         <Outlet />
-//       </Box>
-//       <Footer />
-//     </Box>
-//   );
-// }
 
 // src/layouts/PublicLayout.jsx
 import { Box, Toolbar, Container } from '@mui/material';

@@ -17,7 +17,8 @@ import {
   ListItemText,
   Avatar,
   Tooltip,
-  Container
+  Container,
+  CircularProgress
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -33,6 +34,11 @@ import {
 } from '@mui/icons-material';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import theme from '../theme';
+import axios from 'axios';
+import { useUser } from '../context/userContext'; 
+
+
+
 
 const drawerWidth = theme.custom.drawerWidth;
 const navItems = [
@@ -50,7 +56,20 @@ export default function DashboardLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const handleLogout = () => navigate('/');
+
+   const { setUser } = useUser();
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    delete axios.defaults.headers.common['Authorization'];
+    setUser(null);
+
+    navigate('/', { replace: true });
+  };
+
+      const { user, loading, error } = useUser();
+  
+    if (loading) return <CircularProgress />;
+    if (error)   return <Alert severity="error">Failed to load user</Alert>;
 
   const drawerContent = (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -81,10 +100,10 @@ export default function DashboardLayout() {
       </List>
       <Divider />
       <Box sx={{ p: 2, textAlign: 'center' }}>
-        <Avatar sx={{ mx: 'auto', mb: 1 }}>U</Avatar>
-        <Typography variant="subtitle1">User Name</Typography>
+        <Avatar sx={{ mx: 'auto', mb: 1 }}>{user.firstName[0]}</Avatar>
+        <Typography variant="subtitle1">{user.firstName} {user.lastName}</Typography>
         <Typography variant="body2" color="text.secondary">
-          user@truvyte.ai
+          {user.email}
         </Typography>
       </Box>
       <List>
