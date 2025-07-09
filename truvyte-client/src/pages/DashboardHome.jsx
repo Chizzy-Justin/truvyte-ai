@@ -108,31 +108,7 @@ export default function DashboardHome() {
           />
            </Grid>
          </Grid>
-      {/* <Grid container spacing={3} mb={4}>
-        <Grid item xs={12} sm={6} md={3}>
-          <MetricsCard title="Total Audits" value={user.recentAudits?.length || 0} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <MetricsCard title="Avg. Risk Score" value={`${user.complianceScore}%`} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <MetricsCard title="Active Plan" value={user.plan} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <MetricsCard
-            title="Badge Status"
-            value={
-              user.planEndDate
-                ? `Valid Until ${new Date(user.planEndDate).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}`
-                : 'N/A'
-            }
-          />
-        </Grid>
-      </Grid> */}
+
 
       {/* Recent Audits */}
       <Paper sx={{ p: 3 }}>

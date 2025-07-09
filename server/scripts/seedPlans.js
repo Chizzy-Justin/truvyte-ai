@@ -12,6 +12,7 @@ async function seedPlans() {
     // Define your plans
     const plans = [
       {
+        _id: 'Free',
         name:       'Free',
         priceCents: 0,
         currency:   'USD',
@@ -22,6 +23,7 @@ async function seedPlans() {
         ],
       },
       {
+        _id: 'Pro',
         name:       'Pro',
         priceCents: 2999, // $29.99/month
         currency:   'USD',
@@ -34,6 +36,7 @@ async function seedPlans() {
         ],
       },
       {
+        _id: 'Enterprise',
         name:       'Enterprise',
         priceCents: 9999, // $99.99/month
         currency:   'USD',

@@ -1,31 +1,38 @@
-import { useState, useEffect } from 'react';
+
+// src/components/Billing/InvoiceHistory.jsx
+import React from 'react';
 import {
+  Box,
+  Typography,
   TableContainer,
   Table,
   TableHead,
   TableRow,
   TableCell,
   TableBody,
-  Paper,
   Button,
-  Box,
-  Typography
+  Paper,
+  Stack,
 } from '@mui/material';
 
-// mock data
-const mockInvoices = [
-  { id: 1, date: '2025-06-15', amount: '$49.00', status: 'Paid' },
-  { id: 2, date: '2025-05-15', amount: '$49.00', status: 'Paid' },
-  { id: 3, date: '2025-04-15', amount: '$49.00', status: 'Paid' },
-];
-
-export default function InvoiceHistory() {
-  const [invoices, setInvoices] = useState([]);
-
-  useEffect(() => {
-    setInvoices(mockInvoices);
-  }, []);
-
+/**
+ * invoices: array of {
+ *   _id,
+ *   invoiceNumber,
+ *   issuedAt,
+ *   userFirstName,
+ *   userLastName,
+ *   customerEmail,
+ *   amountCents,
+ *   taxCents,
+ *   discountCents,
+ *   totalCents,
+ *   currency,
+ *   status,
+ *   invoiceUrl
+ * }
+ */
+export default function InvoiceHistory({ invoices }) {
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
@@ -35,23 +42,86 @@ export default function InvoiceHistory() {
         <Table size="small">
           <TableHead>
             <TableRow>
+              <TableCell>Invoice #</TableCell>
               <TableCell>Date</TableCell>
-              <TableCell>Amount</TableCell>
+              <TableCell>Customer</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell align="right">Subtotal</TableCell>
+              <TableCell align="right">Tax</TableCell>
+              <TableCell align="right">Discount</TableCell>
+              <TableCell align="right">Total</TableCell>
               <TableCell>Status</TableCell>
               <TableCell align="right">Download</TableCell>
             </TableRow>
           </TableHead>
+
           <TableBody>
-            {invoices.map((inv) => (
-              <TableRow key={inv.id}>
-                <TableCell>{inv.date}</TableCell>
-                <TableCell>{inv.amount}</TableCell>
-                <TableCell>{inv.status}</TableCell>
-                <TableCell align="right">
-                  <Button size="small">PDF</Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {invoices.map((inv) => {
+              const {
+                _id,
+                invoiceNumber,
+                issuedAt,
+                userFirstName,
+                userLastName,
+                customerEmail,
+                amountCents,
+                taxCents,
+                discountCents,
+                totalCents,
+                currency,
+                status,
+                invoiceUrl,
+              } = inv;
+
+              const fmt = (value) =>
+                (value / 100).toLocaleString(undefined, {
+                  style: 'currency',
+                  currency,
+                });
+
+              return (
+                <TableRow key={_id}>
+                  <TableCell>{invoiceNumber}</TableCell>
+                  <TableCell>
+                    {new Date(issuedAt).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>{`${userFirstName} ${userLastName}`}</TableCell>
+                  <TableCell>{customerEmail}</TableCell>
+                  <TableCell align="right">{fmt(amountCents)}</TableCell>
+                  <TableCell align="right">{fmt(taxCents)}</TableCell>
+                  <TableCell align="right">{fmt(discountCents)}</TableCell>
+                  <TableCell align="right">{fmt(totalCents)}</TableCell>
+                  <TableCell>
+                    <Typography
+                      variant="body2"
+                      color={
+                        status === 'paid' || status === 'success'
+                          ? 'success.main'
+                          : status === 'overdue' || status === 'failed'
+                          ? 'error.main'
+                          : 'text.secondary'
+                      }
+                    >
+                      {status}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    {invoiceUrl ? (
+                      <Button
+                        size="small"
+                        component="a"
+                        href={invoiceUrl}
+                        target="_blank"
+                      >
+                        PDF
+                      </Button>
+                    ) : (
+                      '—'
+                    )}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

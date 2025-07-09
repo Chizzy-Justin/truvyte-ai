@@ -2,11 +2,13 @@
 import React from 'react';
 import { Box, Grid, Card, CardHeader, CardContent, CardActions, Typography, Button } from '@mui/material';
 import { useUser } from '../context/userContext';
+import axios from 'axios';
+
 
 const allPlans = [
   {
     name: 'Free',
-    price: '$0/month',
+    price: 'NGN0/month',
     features: [
       'Up to 5 audits per month',
       'Basic compliance questions',
@@ -15,7 +17,7 @@ const allPlans = [
   },
   {
     name: 'Pro',
-    price: '$49/month',
+    price: 'NGN43,000/month',
     features: [
       'Up to 50 audits per month',
       'Full questionnaire access',
@@ -35,9 +37,35 @@ const allPlans = [
   },
 ];
 
+
+
 export default function DashboardPlans() {
   const { user } = useUser();
-
+const handleChoosePlan = async (planName) => {
+  try {
+     if (planName === 'Free') {
+      // Downgrade immediately without going through Paystack
+      await axios.post('/api/payments/downgrade', {
+        email: user.email,
+      });
+      // Refresh user context or reload page
+      window.location.reload();
+      return;
+    }
+    // Assume you have user.email in context
+    const { data } = await axios.post('/api/payments/initialize', {
+      planName,
+      email: user.email,
+      first_name: user.firstName,
+      last_name: user.lastName,
+    });
+    // Redirect browser to Paystack checkout page
+    window.location.href = data.authorization_url;
+  } catch (err) {
+    console.error('Payment init failed', err);
+    alert(err.response?.data?.error || 'Payment initialization failed.');
+  }
+};
   return (
     <Box>
       <Typography variant="h2" gutterBottom>
@@ -47,10 +75,11 @@ export default function DashboardPlans() {
         {allPlans.map((plan) => {
           const isCurrent = plan.name === user.plan;
           return (
-            <Grid item key={plan.name} xs={12} sm={6} md={4}>
+            <Grid key={plan.name} size={{xs: 12, sm: 6, md: 6}}>
               <Card
                 variant="outlined"
                 sx={{
+                    borderWidth: isCurrent ? 10: 2,
                   borderColor: isCurrent ? 'primary.main' : 'grey.300',
                   boxShadow: isCurrent ? 3 : 1,
                 }}
@@ -71,19 +100,16 @@ export default function DashboardPlans() {
                   </Box>
                 </CardContent>
                 <CardActions sx={{ justifyContent: 'center', pb: 2 }}>
+
                   <Button
-                    variant={isCurrent ? 'contained' : 'outlined'}
-                    color={isCurrent ? 'primary' : 'inherit'}
-                    disabled={isCurrent}
-                    onClick={() => {
-                      if (!isCurrent) {
-                        // TODO: redirect to payment / subscription endpoint
-                        window.location.href = `/api/subscribe?plan=${plan.name}`;
-                      }
-                    }}
-                  >
-                    {isCurrent ? 'Current Plan' : 'Choose Plan'}
-                  </Button>
+                        variant={isCurrent ? 'contained' : 'outlined'}
+                        color={isCurrent ? 'primary' : 'inherit'}
+                        disabled={isCurrent}
+                        onClick={() => handleChoosePlan(plan.name)}
+                        >
+                        {isCurrent ? 'Current Plan' : 'Choose Plan'}
+                        </Button>
+
                 </CardActions>
               </Card>
             </Grid>

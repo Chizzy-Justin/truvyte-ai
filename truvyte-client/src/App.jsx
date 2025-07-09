@@ -10,6 +10,7 @@ import AdminRoutes from './admin/AdminRoutes';
 import theme from './theme'
 import ScrollToTop from './components/ScrollToTop';
 
+
 // Lazy‑load all page components
 const Home           = lazy(() => import('./pages/Home'));
 const Plans          = lazy(() => import('./pages/Plans'));
@@ -24,6 +25,7 @@ const URLAudit       = lazy(() => import('./pages/URLAudit'));
 const Billing        = lazy(() => import('./pages/Billing'));
 const Settings       = lazy(() => import('./pages/Settings'));
 const Help           = lazy(() => import('./pages/Help'));
+const DashboardPlans = lazy(() => import('./pages/DashboardPlans'));
 
 
 const Spinner = () => (
@@ -119,6 +121,9 @@ export default function App() {
             }/>
             <Route path="help" element={
               <Suspense fallback={<Spinner />}><Help /></Suspense>
+            }/>
+            <Route path="plans" element={
+              <Suspense fallback={<Spinner />}><DashboardPlans /></Suspense>
             }/>
             <Route path="*" element={<Navigate to="/dashboard/home" replace />} />
           </Route>

@@ -15,9 +15,15 @@ const app = express();
 
 // Middlewares
 app.use(cors());
+app.post(
+  '/api/payments/webhook',
+  express.raw({ type: 'application/json' }), 
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
+
+
 
 // Routes
 app.use('/auth', authRoutes);
@@ -26,6 +32,10 @@ app.use('/api', apiRoutes);
 // Global error handler (must come after routes)
 app.use(errorHandler);
 
+
+const scheduleRenewals = require('./src/jobs/renewSubscriptions');
+// Start the subscription‐renewal cron job
+scheduleRenewals();
 // Connect to MongoDB & start server
 const PORT = process.env.PORT || 4000;
 mongoose
